@@ -1,15 +1,15 @@
 import colors from 'ansi-colors'
-import stripAnsi from 'strip-ansi'
 import ArrayPrompt from 'enquirer/lib/types/array'
 import utils from 'enquirer/lib/utils'
 import fuzzy from 'fuzzy'
+import stripAnsi from 'strip-ansi'
 import {
   ChoiceInPrompt,
-  ScaleWithIndex,
-  ScaleWithName,
-  KeyPressEvent,
   ExecutionGroup,
-  IRushSelect
+  IRushSelect,
+  KeyPressEvent,
+  ScaleWithIndex,
+  ScaleWithName
 } from './interfaces'
 import { padReplace } from './string-utils'
 
@@ -148,10 +148,9 @@ class RushSelect extends ArrayPrompt implements IRushSelect {
         }
       }
 
-      return customSortOrder(a.customSortText || a.category) <
+      return customSortOrder(a.customSortText || a.category).localeCompare(
         customSortOrder(b.customSortText || b.category)
-        ? -1
-        : 1
+      )
     })
   }
 
@@ -325,8 +324,13 @@ class RushSelect extends ArrayPrompt implements IRushSelect {
 
     try {
       choice.scaleIndex = this.getNextIndexThatHasAvailableScript('right', choice)
-    } catch (e) {
-      if (e.message !== 'no scale script item available to move to in that direction') {
+    } catch (e: unknown) {
+      if (
+        e &&
+        typeof e === 'object' &&
+        'message' in e &&
+        e.message !== 'no scale script item available to move to in that direction'
+      ) {
         throw e
       }
     }
@@ -342,8 +346,13 @@ class RushSelect extends ArrayPrompt implements IRushSelect {
       choice.scaleIndex = this.getNextIndexThatHasAvailableScript('left', choice)
 
       return this.render()
-    } catch (e) {
-      if (e.message !== 'no scale script item available to move to in that direction') {
+    } catch (e: unknown) {
+      if (
+        e &&
+        typeof e === 'object' &&
+        'message' in e &&
+        e.message !== 'no scale script item available to move to in that direction'
+      ) {
         throw e
       }
     }
@@ -549,9 +558,9 @@ class RushSelect extends ArrayPrompt implements IRushSelect {
     let bulletCharacter = ' '
 
     const now = new Date()
-    if (now.getMonth() == 10 && now.getDate() == 31) {
-      selectedBulletCharacter = '😱'
-      bulletCharacter = '👻'
+    if (now.getMonth() == 9 && now.getDate() == 31) {
+      selectedBulletCharacter = '😱 '
+      bulletCharacter = '👻 '
     }
 
     const hasSiblingAbove = this.visible[i - 1] && this.visible[i - 1].name === choice.name

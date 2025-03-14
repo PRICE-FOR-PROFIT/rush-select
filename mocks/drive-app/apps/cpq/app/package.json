@@ -1,0 +1,9 @@
+{
+  "name": "@insight2profit/clientdemo-cpq-app",
+  "scripts": {
+    "start": "echo You selected clientdemo-cpq-app start!",
+    "build": "echo You selected clientdemo-cpq-app build!",
+    "test": "echo You selected clientdemo-cpq-app test!",
+    "lint": "echo You selected clientdemo-cpq-app lint!"
+  }
+}

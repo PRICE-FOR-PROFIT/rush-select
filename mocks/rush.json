@@ -1,29 +1,84 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/rush.schema.json",
   "projects": [
+    // {
+    //   "packageName": "random-package",
+    //   "projectFolder": "random-package"
+    // },
+    // {
+    //   "packageName": "cli-package",
+    //   "projectFolder": "tooling/cli-package",
+    //   "reviewCategory": "tooling"
+    // },
+    // {
+    //   "packageName": "cli-package",
+    //   "projectFolder": "tooling/cli-package",
+    //   "reviewCategory": "tooling"
+    // },
+    // {
+    //   "packageName": "mfe-package-a",
+    //   "projectFolder": "micro-frontends/mfe-package-a",
+    //   "reviewCategory": "micro-frontends"
+    // },
+    // {
+    //   "packageName": "mfe-package-b",
+    //   "projectFolder": "micro-frontends/mfe-package-b",
+    //   "reviewCategory": "micro-frontends"
+    // },
+    // {
+    //   "packageName": "browser-package",
+    //   "projectFolder": "libraries/browser-package",
+    //   "reviewCategory": "libraries"
+    // },
     {
-      "packageName": "random-package",
-      "projectFolder": "random-package"
+      "packageName": "@insight2profit/clientdemo-account-app",
+      "projectFolder": "drive-app/apps/account/app",
+      "reviewCategory": "Drive App"
     },
     {
-      "packageName": "cli-package",
-      "projectFolder": "tooling/cli-package",
-      "reviewCategory": "tooling"
+      "packageName": "@insight2profit/clientdemo-account-service",
+      "projectFolder": "drive-app/apps/account/service",
+      "reviewCategory": "Drive App"
     },
     {
-      "packageName": "mfe-package-a",
-      "projectFolder": "micro-frontends/mfe-package-a",
-      "reviewCategory": "micro-frontends"
+      "packageName": "@client/shared",
+      "projectFolder": "drive-app/packages/client",
+      "reviewCategory": "Packages"
     },
     {
-      "packageName": "mfe-package-b",
-      "projectFolder": "micro-frontends/mfe-package-b",
-      "reviewCategory": "micro-frontends"
+      "packageName": "@insight2profit/clientdemo-pd-app",
+      "projectFolder": "drive-app/apps/pd/app",
+      "reviewCategory": "Drive App"
     },
     {
-      "packageName": "browser-package",
-      "projectFolder": "libraries/browser-package",
-      "reviewCategory": "libraries"
+      "packageName": "@insight2profit/clientdemo-pd-service",
+      "projectFolder": "drive-app/apps/pd/service",
+      "reviewCategory": "Drive App"
+    },
+    {
+      "packageName": "@insight2profit/clientdemo-pmt-app",
+      "projectFolder": "drive-app/apps/pmt/app",
+      "reviewCategory": "Drive App"
+    },
+    {
+      "packageName": "@insight2profit/clientdemo-pmt-service",
+      "projectFolder": "drive-app/apps/pmt/service",
+      "reviewCategory": "Drive App"
+    },
+    {
+      "packageName": "@insight2profit/clientdemo-scripts",
+      "projectFolder": "drive-app/apps/scripts",
+      "reviewCategory": "Drive App Scripts"
+    },
+    {
+      "packageName": "@insight2profit/clientdemo-cpq-app",
+      "projectFolder": "drive-app/apps/cpq/app",
+      "reviewCategory": "Drive App"
+    },
+    {
+      "packageName": "@insight2profit/clientdemo-cpq-service",
+      "projectFolder": "drive-app/apps/cpq/service",
+      "reviewCategory": "Drive App"
     }
   ]
 }

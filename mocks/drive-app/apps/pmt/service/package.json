@@ -1,0 +1,8 @@
+{
+  "name": "@insight2profit/clientdemo-pmt-service",
+  "scripts": {
+    "start": "echo You selected clientdemo-pmt-service start!",
+    "build": "echo You selected clientdemo-pmt-service build!",
+    "test": "echo You selected clientdemo-pmt-service test!"
+  }
+}

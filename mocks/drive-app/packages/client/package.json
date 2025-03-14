@@ -1,0 +1,10 @@
+{
+  "name": "@client/shared",
+  "scripts": {
+    "test": "echo You selected @client/shared test!",
+    "build": "echo You selected @client/shared build!",
+    "build:watch": "echo You selected @client/shared build:watch!",
+    "build:clean": "echo You selected @client/shared build:clean!",
+    "build:dev": "echo You selected @client/shared build:dev!"
+  }
+}

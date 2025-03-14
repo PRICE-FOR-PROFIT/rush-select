@@ -1,0 +1,10 @@
+{
+  "name": "@insight2profit/clientdemo-scripts",
+  "scripts": {
+    "build": "echo You selected clientdemo-scripts build!",
+    "start": "echo You selected clientdemo-scripts start!",
+    "test": "echo You selected clientdemo-scripts test!",
+    "initialize-data": "echo You selected clientdemo-scripts initialize-data!",
+    "cleanup-mock-data": "echo You selected clientdemo-scripts cleanup-mock-data!"
+  }
+}

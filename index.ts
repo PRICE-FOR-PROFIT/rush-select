@@ -1,16 +1,16 @@
 #!/usr/bin/env node
-import path from 'path'
 
-import { Choice, SubmittedChoice } from './interfaces'
 import { spawnStreaming } from '@lerna/child-process'
-import readline from 'readline'
-import child_process from 'child_process'
 import colors from 'ansi-colors'
+import child_process from 'child_process'
+import readline from 'readline'
+import { applySelectedScriptsOnChoicesFromCache, createChoices } from './choice-generation'
+import { Choice, SubmittedChoice } from './interfaces'
 import RushSelect from './prompt'
-import { createChoices, applySelectedScriptsOnChoicesFromCache } from './choice-generation'
-import { save, load } from './save-load'
 import { getProjectsAndRespectivePackageJson, getRushRootDir } from './rush-utils'
+import { load, save } from './save-load'
 
+import path from 'path'
 import { getArgs } from './yargs'
 const argv = getArgs()
 
@@ -47,7 +47,7 @@ const createRushPrompt = async (
     choices,
     executionGroups: [
       {
-        category: 'pre-scripts (executes from top to bottom)',
+        category: 'Pre-scripts (executes from top to bottom)',
         name: 'rush',
         scriptNames: ['ignore', 'install', 'update'],
         scriptExecutable: 'rush',
@@ -55,11 +55,11 @@ const createRushPrompt = async (
         scriptCommand: []
       },
       {
-        category: 'how to build the packages prior to running the scripts',
+        category: 'Build',
         name: 'rush build',
-        initial: 'smart',
+        initial: 'ignore',
         allowMultipleScripts: false,
-        scriptNames: ['ignore', 'smart', 'regular', 'rebuild'],
+        scriptNames: ['ignore', 'regular', 'rebuild', 'smart'],
         scriptExecutable: 'rush',
         customSortText: '__',
         scriptCommand: []
@@ -67,9 +67,16 @@ const createRushPrompt = async (
     ],
     edgeLength: 2,
     // the description above the items
-    scale: allScriptNames.sort().map((name: string) => ({
-      name
-    }))
+    scale: allScriptNames
+      .sort((a, b) => {
+        if ([a, b].includes('start')) {
+          return a === 'start' ? -1 : 1
+        }
+        return a.localeCompare(b)
+      })
+      .map((name: string) => ({
+        name
+      }))
   })
 
   const scriptsToRun: Array<SubmittedChoice> = await rushSelect.run()
@@ -131,25 +138,29 @@ const runScripts = (submittedChoices: Array<SubmittedChoice>) => {
     return result > val ? result : val
   }, 0)
 
-  return submittedChoices
-    .filter((submittedChoice) => !!submittedChoice.project)
-    .map((submittedChoice: SubmittedChoice) =>
-      spawnStreaming(
-        submittedChoice.scriptExecutable,
-        (submittedChoice.scriptCommand || []).concat(submittedChoice.script),
-        {
-          cwd: submittedChoice
-            ? path.resolve(
-                getRushRootDir(),
-                // @ts-expect-error project is not undefined, because we do filtering.
-                submittedChoice.project.projectFolder
-              )
-            : getRushRootDir(),
-          env: { FORCE_COLOR: true }
-        },
-        getPrefix(submittedChoice.packageName, submittedChoice.script).padEnd(longestSequence, ' ')
+  return (
+    submittedChoices
+      // .filter((submittedChoice) => !!submittedChoice.project)
+      .map((submittedChoice: SubmittedChoice) =>
+        spawnStreaming(
+          submittedChoice.scriptExecutable,
+          (submittedChoice.scriptCommand || []).concat(submittedChoice.script),
+          {
+            cwd: submittedChoice
+              ? (() =>
+                  submittedChoice?.project
+                    ? path.resolve(getRushRootDir(), submittedChoice?.project?.projectFolder)
+                    : path.resolve(getRushRootDir()))()
+              : getRushRootDir(),
+            env: { FORCE_COLOR: true }
+          },
+          getPrefix(submittedChoice.packageName, submittedChoice.script).padEnd(
+            longestSequence,
+            ' '
+          )
+        )
       )
-    )
+  )
 }
 
 // makes user able to CTRL + C during execution

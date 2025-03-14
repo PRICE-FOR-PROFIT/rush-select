@@ -1,7 +1,7 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
+import { SavedEntries, SavedEntry, SubmittedChoice } from './interfaces'
 import { version } from './package.json'
-import { SubmittedChoice, SavedEntries, SavedEntry } from './interfaces'
 
 const answersFilePath = path.resolve(__dirname, '.cached-answers.json')
 
@@ -9,8 +9,8 @@ export const save = (rushRootDir: string, projectsToRun: Array<SubmittedChoice>)
   let fileContents
   try {
     fileContents = JSON.parse(fs.readFileSync(answersFilePath).toString())
-  } catch (e) {
-    if (e.code === 'ENOENT') {
+  } catch (e: unknown) {
+    if (e && typeof e === 'object' && 'code' in e && e.code === 'ENOENT') {
       // no cached answers, that's ok.
       fileContents = {}
     } else {
@@ -29,7 +29,7 @@ export const save = (rushRootDir: string, projectsToRun: Array<SubmittedChoice>)
   })
 
   // add to existing results, if any
-  fileContents[rushRootDir] = {};
+  fileContents[rushRootDir] = {}
   fileContents[rushRootDir].packages = projectsToRunByNameJsonFriendly
   fileContents[rushRootDir].cliVersion = version
 
@@ -47,8 +47,8 @@ export const load = (rushRootDir: string): SavedEntry => {
 
       cachedAnswers = {}
     }
-  } catch (e) {
-    if (e.code === 'ENOENT') {
+  } catch (e: unknown) {
+    if (e && typeof e === 'object' && 'code' in e && e.code === 'ENOENT') {
       // no cached answers, that's ok.
     } else {
       // other unknown error, throw it
@@ -56,8 +56,10 @@ export const load = (rushRootDir: string): SavedEntry => {
     }
   }
 
-  return cachedAnswers[rushRootDir] || {
-    packages: [],
-    cliVersion: version,
-  }
+  return (
+    cachedAnswers[rushRootDir] || {
+      packages: [],
+      cliVersion: version
+    }
+  )
 }
