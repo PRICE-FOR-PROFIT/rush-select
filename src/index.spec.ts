@@ -1,7 +1,7 @@
 // let mockLastSavedResult = {}
 // let mockLastLoadedResult = {}
 import stripAnsi from 'strip-ansi'
-import { SavedEntries, SubmittedChoice } from './interfaces'
+import { SavedEntries, SubmittedChoice } from './shared/types/interfaces'
 
 const cleanupFunctionsToCall: Array<() => void> = []
 let mockLastPrinted: string
