@@ -19,7 +19,7 @@ import { Argv } from '../shared/types/interfaces'
  * ```
  */
 export const getArgs = (): Argv =>
-  yargs.usage('$0 --include start --include build:watch -d lint').options({
+  yargs.usage('$0 --include start').options({
     include: {
       alias: 'i',
       demandOption: false,
