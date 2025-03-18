@@ -4,14 +4,17 @@ import { spawnStreaming } from '@lerna/child-process'
 import colors from 'ansi-colors'
 import child_process from 'child_process'
 import readline from 'readline'
-import { applySelectedScriptsOnChoicesFromCache, createChoices } from './choice-generation'
-import { Choice, SubmittedChoice } from './interfaces'
-import RushSelect from './prompt'
-import { getProjectsAndRespectivePackageJson, getRushRootDir } from './rush-utils'
-import { load, save } from './save-load'
+import {
+  applySelectedScriptsOnChoicesFromCache,
+  createChoices
+} from './choice-generation/choice-generation'
+import RushSelect from './prompt/prompt'
+import { load, save } from './save-load/save-load'
+import { Choice, SubmittedChoice } from './shared/types/interfaces'
+import { getProjectsAndRespectivePackageJson, getRushRootDir } from './shared/utils/rush-utils'
 
 import path from 'path'
-import { getArgs } from './yargs'
+import { getArgs } from './yargs/yargs'
 const argv = getArgs()
 
 // scripts that should be executed with this prompt. Can be edited, shouldn't break anything
@@ -68,12 +71,7 @@ const createRushPrompt = async (
     edgeLength: 2,
     // the description above the items
     scale: allScriptNames
-      .sort((a, b) => {
-        if ([a, b].includes('start')) {
-          return a === 'start' ? -1 : 1
-        }
-        return a.localeCompare(b)
-      })
+      .sort((a, b) => a.localeCompare(b))
       .map((name: string) => ({
         name
       }))

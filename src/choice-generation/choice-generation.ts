@@ -1,4 +1,10 @@
-import { Choice, Project, Package, CreatedChoicesAndScriptNames, SavedEntry } from './interfaces'
+import {
+  Choice,
+  CreatedChoicesAndScriptNames,
+  Package,
+  Project,
+  SavedEntry
+} from '../shared/types/interfaces'
 
 export const createChoices = (
   projects: Array<Project>,

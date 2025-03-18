@@ -10,8 +10,8 @@ import {
   KeyPressEvent,
   ScaleWithIndex,
   ScaleWithName
-} from './interfaces'
-import { padReplace } from './string-utils'
+} from '../shared/types/interfaces'
+import { padReplace } from '../shared/utils/string-utils'
 
 class RushSelect extends ArrayPrompt implements IRushSelect {
   constructor(options = {}) {

@@ -34,8 +34,8 @@ export interface ExecutionGroup {
 
 export interface Package {
   packageName: string
-  script: string,
-  scriptExecutable: string,
+  script: string
+  scriptExecutable: string
   scriptCommand: Array<string>
 }
 

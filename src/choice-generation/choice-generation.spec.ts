@@ -1,5 +1,5 @@
+import { Project } from '../shared/types/interfaces'
 import { applySelectedScriptsOnChoicesFromCache, createChoices } from './choice-generation'
-import { Project } from './interfaces'
 
 const createMockProjects = (): Array<Project> => [
   {

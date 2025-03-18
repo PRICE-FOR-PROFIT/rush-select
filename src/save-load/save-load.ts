@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
-import { SavedEntries, SavedEntry, SubmittedChoice } from './interfaces'
-import { version } from './package.json'
+import { version } from '../../package.json'
+import { SavedEntries, SavedEntry, SubmittedChoice } from '../shared/types/interfaces'
 
 const answersFilePath = path.resolve(__dirname, '.cached-answers.json')
 
