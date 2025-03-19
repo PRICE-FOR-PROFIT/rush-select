@@ -1,7 +1,7 @@
-import { Project } from '../shared/types/interfaces'
+import { RushProjectWithPackageJson } from '../shared/types/interfaces'
 import { applySelectedScriptsOnChoicesFromCache, createChoices } from './choice-generation'
 
-const createMockProjects = (): Array<Project> => [
+const createMockProjects = (): RushProjectWithPackageJson[] => [
   {
     projectFolder: 'projectFolder',
     packageName: 'packageName',

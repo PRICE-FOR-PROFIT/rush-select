@@ -97,30 +97,41 @@ export interface ChoiceInPrompt {
   customSortText?: string
 }
 
-export interface Project {
+export type RushProject = {
   packageName: string
   projectFolder: string
-  reviewCategory: string
-  shouldPublish: boolean
-  packageJson: {
-    name: string
-    version: string
-    main: string
-    description: string
-    author: string
-    scripts: {
-      [keys: string]: string
-    }
-    devDependencies: {
-      [keys: string]: string
-    }
+  subspaceName?: string
+  reviewCategory?: string
+  decoupledLocalDependencies?: string[]
+  skipRushCheck?: boolean
+  shouldPublish?: boolean
+  publishFolder?: string
+  versionPolicyName?: string
+  tags?: string[]
+}
+
+type PackageJson = {
+  name: string
+  version?: string
+  main?: string
+  description?: string
+  author?: string
+  scripts?: {
+    [keys: string]: string
   }
+  devDependencies?: {
+    [keys: string]: string
+  }
+}
+
+export type RushProjectWithPackageJson = RushProject & {
+  packageJson: PackageJson
 }
 
 export interface SubmittedChoice {
   packageName: string
   script: string
-  scriptExecutable: string | undefined
-  scriptCommand: Array<string> | undefined
-  project: undefined | Project
+  scriptExecutable?: string
+  scriptCommand?: Array<string>
+  project?: RushProjectWithPackageJson
 }

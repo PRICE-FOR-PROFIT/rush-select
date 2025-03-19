@@ -10,7 +10,7 @@ import {
 } from './choice-generation/choice-generation'
 import RushSelect from './prompt/prompt'
 import { load, save } from './save-load/save-load'
-import { Choice, SubmittedChoice } from './shared/types/interfaces'
+import { Choice, RushProjectWithPackageJson, SubmittedChoice } from './shared/types/interfaces'
 import { getProjectsAndRespectivePackageJson, getRushRootDir } from './shared/utils/rush-utils'
 
 import path from 'path'
@@ -38,7 +38,7 @@ const isScriptNameAllowed = (scriptName: string): boolean =>
 const createRushPrompt = async (
   choices: Array<Choice>,
   allScriptNames: Array<string>,
-  projects: Array<SubmittedChoice>
+  projects: RushProjectWithPackageJson[]
 ) => {
   const rushSelect = new RushSelect({
     name: 'rush-select',
@@ -77,16 +77,16 @@ const createRushPrompt = async (
       }))
   })
 
-  const scriptsToRun: Array<SubmittedChoice> = await rushSelect.run()
+  const scriptsToRun: SubmittedChoice[] = await rushSelect.run()
 
   if (scriptsToRun.length === 0) {
     return null
   }
 
   interface Scripts {
-    pre: Array<SubmittedChoice>
-    rushBuild: undefined | SubmittedChoice
-    main: Array<SubmittedChoice>
+    pre: SubmittedChoice[]
+    rushBuild?: SubmittedChoice
+    main: SubmittedChoice[]
   }
 
   const scripts: Scripts = {
@@ -113,11 +113,12 @@ const createRushPrompt = async (
       }
 
       // add project reference
-      const project = projects.find((p: SubmittedChoice) => p.packageName === item.packageName)
+      const project = projects.find(
+        (p: RushProjectWithPackageJson) => p.packageName === item.packageName
+      )
       if (project) {
         scripts.main.push({
           ...item,
-          // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
           project
         })
       }

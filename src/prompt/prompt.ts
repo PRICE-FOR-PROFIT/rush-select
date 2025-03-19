@@ -256,7 +256,7 @@ class RushSelect extends ArrayPrompt implements IRushSelect {
   }
 
   toggleSelectionForScaleIndexInChoice(choice: ChoiceInPrompt): void {
-    if (this.getChoiceAvailableScriptIndexes(choice)[0].index === choice.scaleIndex) {
+    if (this.getChoiceAvailableScriptIndexes(choice)[0]?.index === choice.scaleIndex) {
       // it's just an ignore scale item, don't select it
       return
     }
@@ -406,7 +406,7 @@ class RushSelect extends ArrayPrompt implements IRushSelect {
     const scaleItemIsSelected = choice.selected.includes(item.index)
 
     const isIgnoreScript =
-      this.getChoiceAvailableScriptIndexes(choice)[0].index === choice.scaleIndex
+      this.getChoiceAvailableScriptIndexes(choice)[0]?.index === choice.scaleIndex
 
     const choiceIsFocused = this.index === choiceIndex
 
@@ -440,8 +440,10 @@ class RushSelect extends ArrayPrompt implements IRushSelect {
   }
 
   getChoiceAvailableScriptIndexes(choice: ChoiceInPrompt): Array<ScaleWithIndex> {
-    return choice.scale.filter((s: ScaleWithIndex) =>
-      this.isScriptAvailable(this.scale[s.index], choice)
+    return (
+      choice.scale?.filter((s: ScaleWithIndex) =>
+        this.isScriptAvailable(this.scale[s.index], choice)
+      ) ?? []
     )
   }
 
@@ -740,13 +742,13 @@ class RushSelect extends ArrayPrompt implements IRushSelect {
 
       if (
         !choice.selected.includes(choice.scaleIndex) &&
-        choice.scaleIndex !== availableScriptIndexes[0].index
+        choice.scaleIndex !== availableScriptIndexes[0]?.index
       ) {
         // a script is focused which is not the ignore script
         choice.selected.push(choice.scaleIndex)
       }
 
-      this.getChoiceAvailableScriptIndexes(choice)[0].index
+      this.getChoiceAvailableScriptIndexes(choice)[0]?.index
       const selectedScripts: Array<string> = availableScriptIndexes
         .filter(({ index }) => choice.selected.includes(index))
         .map(({ index }) => this.scale[index].name)

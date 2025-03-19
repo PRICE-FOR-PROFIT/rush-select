@@ -2,50 +2,57 @@ import {
   Choice,
   CreatedChoicesAndScriptNames,
   Package,
-  Project,
+  RushProjectWithPackageJson,
   SavedEntry
 } from '../shared/types/interfaces'
 
 export const createChoices = (
-  projects: Array<Project>,
+  projects: RushProjectWithPackageJson[],
   scriptFilterFn: (_: string) => boolean = () => true
 ): CreatedChoicesAndScriptNames => {
-  const tempSet = new Set<string>([])
-
   if (!scriptFilterFn) {
     scriptFilterFn = () => {
       return true
     }
   }
 
-  const choices = projects
-    // some projects may not have a single script that is allowed to run, so filter them out
-    .filter(
-      (project: Project) =>
-        project.packageJson &&
-        project.packageJson.scripts &&
-        Object.keys(project.packageJson.scripts).some((scriptName) => scriptFilterFn(scriptName))
+  const filteredProjects = projects.filter(({ packageJson }: RushProjectWithPackageJson) => {
+    const hasUnfilteredScripts = Object.keys(packageJson?.scripts || {}).some((scriptName) =>
+      scriptFilterFn(scriptName)
     )
-    .reduce((total: Array<Choice>, project: Project) => {
+    return (
+      packageJson &&
+      packageJson?.scripts &&
+      // some projects may not have a single script that is allowed to run, so filter them out
+      hasUnfilteredScripts
+    )
+  })
+
+  const tempSet = new Set<string>([])
+  const choices: Choice[] = filteredProjects.reduce(
+    (total, { packageJson, packageName, reviewCategory }) => {
       // keep track of the scripts that were found
-      if (project.packageJson.scripts) {
-        Object.keys(project.packageJson.scripts).forEach((s) => tempSet.add(s))
+      if (packageJson.scripts) {
+        Object.keys(packageJson.scripts).forEach((s) => tempSet.add(s))
       }
 
-      const availableScripts = Object.keys(project.packageJson.scripts || [])
-        .sort()
+      const availableScripts = Object.keys(packageJson.scripts || {})
+        .sort((a, b) => a.localeCompare(b))
         .filter(scriptFilterFn)
 
-      // insert a project
-      total.push({
-        name: project.packageName,
-        category: project.reviewCategory,
-        scriptExecutable: 'npm',
-        scriptCommand: ['run'],
-        availableScripts
-      })
-      return total
-    }, [])
+      return [
+        ...total,
+        {
+          name: packageName,
+          category: reviewCategory ?? '',
+          scriptExecutable: 'npm',
+          scriptCommand: ['run'],
+          availableScripts
+        }
+      ]
+    },
+    [] as Choice[]
+  )
 
   return {
     choices,
@@ -54,7 +61,7 @@ export const createChoices = (
 }
 
 export const applySelectedScriptsOnChoicesFromCache = (
-  choices: Array<Choice>,
+  choices: Choice[],
   savedProjectScripts: SavedEntry,
   scriptFilterFn: (param: string) => boolean
 ): void => {

@@ -17,7 +17,7 @@ const setup = async () => {
   let mockLastSavedResult
   let mockLastLoadedResult: SavedEntries
 
-  jest.mock('./save-load', () => ({
+  jest.mock('./save-load/save-load', () => ({
     save: jest.fn((directory: string, data: Array<SubmittedChoice>) => {
       // eslint-disable-next-line
       mockLastSavedResult = data
@@ -42,7 +42,7 @@ const setup = async () => {
     }))
   }))
 
-  jest.mock('./choice-generation', () => ({
+  jest.mock('./choice-generation/choice-generation', () => ({
     createChoices: jest.fn(() => ({
       choices: [
         {
@@ -82,8 +82,8 @@ const setup = async () => {
   const promptReadyPromise = new Promise((resolve: any) => {
     mockReadyResolve = resolve
   })
-  jest.mock('./prompt', () => {
-    return class RushSelect extends jest.requireActual('./prompt').default {
+  jest.mock('./prompt/prompt', () => {
+    return class RushSelect extends jest.requireActual('./prompt/prompt').default {
       stdout: any
       constructor(options: any) {
         super(options)
@@ -147,18 +147,12 @@ describe('index', () => {
     cleanupFunctionsToCall.splice(0).forEach((f) => f())
   })
 
-  test('submitting immediately should leave basically empty results', async () => {
+  test('submitting immediately should leave empty results', async () => {
     const { runAndSubmit } = await setup()
 
-    expect(await runAndSubmit()).toEqual([
-      {
-        packageName: 'rush build',
-        script: 'smart',
-        scriptExecutable: 'rush',
-        scriptCommand: []
-      }
-    ])
+    expect(await runAndSubmit()).toEqual([])
   })
+
   test('should list some packages', async () => {
     const { promptInstance, runAndSubmit } = await setup()
 
@@ -168,12 +162,6 @@ describe('index', () => {
     await promptInstance.right()
 
     expect(await runAndSubmit()).toEqual([
-      {
-        packageName: 'rush build',
-        script: 'smart',
-        scriptExecutable: 'rush',
-        scriptCommand: []
-      },
       {
         packageName: 'random-package',
         script: 'build:prod',
@@ -244,12 +232,6 @@ describe('index', () => {
 
     const result = await runAndSubmit()
     expect(result).toEqual([
-      {
-        packageName: 'rush build',
-        script: 'smart',
-        scriptExecutable: 'rush',
-        scriptCommand: []
-      },
       {
         packageName: 'random-package',
         script: 'build',
