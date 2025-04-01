@@ -11,7 +11,7 @@ import {
   ScaleWithIndex,
   ScaleWithName
 } from '../shared/types/interfaces'
-import { padReplace } from '../shared/utils/string-utils'
+import { padReplace } from '../shared/utils/string'
 
 class RushSelect extends ArrayPrompt implements IRushSelect {
   constructor(options = {}) {

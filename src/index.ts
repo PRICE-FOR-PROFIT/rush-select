@@ -11,7 +11,7 @@ import {
 import RushSelect from './prompt/prompt'
 import { load, save } from './save-load/save-load'
 import { Choice, RushProjectWithPackageJson, SubmittedChoice } from './shared/types/interfaces'
-import { getProjectsAndRespectivePackageJson, getRushRootDir } from './shared/utils/rush-utils'
+import { getProjectsAndRespectivePackageJson, getRushRootDir } from './shared/utils/rush'
 
 import path from 'path'
 import { getArgs } from './yargs/yargs'
